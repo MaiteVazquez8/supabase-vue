@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { supabase } from '@/supabase'
 
@@ -11,10 +11,38 @@ const repetirPassword = ref('')
 const cargando = ref(false)
 const mensaje = ref('')
 const exito = ref(false)
+const sesionLista = ref(false)
 
 const modoCambio = computed(() => {
   return route.query.reset === 'true' || route.query.type === 'recovery' || Boolean(route.query.code)
 })
+
+watch(
+  () => route.query.code,
+  async (codigo) => {
+    if (!codigo) {
+      sesionLista.value = true
+      return
+    }
+
+    try {
+      cargando.value = true
+      const { error } = await supabase.auth.exchangeCodeForSession(codigo)
+
+      if (error) {
+        throw error
+      }
+
+      sesionLista.value = true
+    } catch (error) {
+      mensaje.value = error.message
+      sesionLista.value = false
+    } finally {
+      cargando.value = false
+    }
+  },
+  { immediate: true },
+)
 
 async function enviarCorreoRecuperacion() {
   mensaje.value = ''
@@ -99,6 +127,8 @@ async function actualizarPassword() {
         {{ modoCambio ? 'Ingresá tu nueva contraseña.' : 'Ingresá tu correo electrónico para recibir un enlace de recuperación.' }}
       </p>
 
+      <p v-if="modoCambio && !sesionLista" class="mensaje error">Preparando tu sesión para cambiar la contraseña...</p>
+
       <form v-if="!modoCambio" @submit.prevent="enviarCorreoRecuperacion" class="formulario">
         <div class="campo">
           <label for="email">Correo electrónico</label>
@@ -117,7 +147,7 @@ async function actualizarPassword() {
         </button>
       </form>
 
-      <form v-else @submit.prevent="actualizarPassword" class="formulario">
+      <form v-else-if="sesionLista" @submit.prevent="actualizarPassword" class="formulario">
         <div class="campo">
           <label for="nuevaPassword">Nueva contraseña</label>
           <input
