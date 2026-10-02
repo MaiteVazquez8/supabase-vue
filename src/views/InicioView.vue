@@ -51,6 +51,10 @@ async function cerrarSesion() {
         Cambiar contraseña
       </button>
 
+      <button type="button" @click="router.push('/productos')">
+        Administrar productos
+      </button>
+
       <button type="button" :disabled="cerrandoSesion" @click="cerrarSesion">
         {{ cerrandoSesion ? 'Cerrando...' : 'Cerrar sesión' }}
       </button>

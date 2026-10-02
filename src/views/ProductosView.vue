@@ -365,3 +365,382 @@ Eliminar
 </section>
 </main>
 </template>
+
+<style scoped>
+:global(body) {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f3f6fb;
+  color: #0f172a;
+}
+
+.pagina-productos {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  gap: 24px;
+  padding: 32px 20px;
+  background: linear-gradient(135deg, #eef4ff 0%, #f8fafc 48%, #eefbf5 100%);
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 26px;
+}
+
+.formulario-panel {
+  align-self: start;
+}
+
+.etiqueta {
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+h1,
+h2 {
+  margin: 0;
+  color: #0f172a;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 2vw, 2.4rem);
+}
+
+h2 {
+  font-size: 1.6rem;
+}
+
+.introduccion {
+  margin: 12px 0 22px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.formulario label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+input[type='text'],
+input[type='number'],
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #f8fafc;
+  color: #0f172a;
+  padding: 0.8rem 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+input[type='text']:focus,
+input[type='number']:focus,
+textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+  background: #fff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+}
+
+input[type='file'] {
+  padding: 0.7rem 0.6rem;
+  border: 1px dashed #93c5fd;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #1e3a8a;
+}
+
+small {
+  color: #64748b;
+  font-size: 0.76rem;
+}
+
+.check {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 10px !important;
+  color: #334155;
+}
+
+.check input {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+}
+
+.contenedor-vista-previa {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f8fbff 0%, #eef2ff 100%);
+  color: #1d4ed8;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.vista-previa {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.12);
+}
+
+.acciones-formulario {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+button[type='submit'],
+.acciones-tabla .editar {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+}
+
+button[type='submit'] {
+  min-width: 180px;
+  padding: 0.9rem 1.2rem;
+}
+
+button.secundario,
+.acciones-tabla .eliminar {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+button.secundario {
+  padding: 0.8rem 1.1rem;
+}
+
+.acciones-tabla .editar,
+.acciones-tabla .eliminar {
+  padding: 0.6rem 0.85rem;
+  min-width: 76px;
+}
+
+.acciones-tabla .eliminar {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.mensaje {
+  margin: 0;
+  border-radius: 12px;
+  padding: 0.8rem 0.95rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.mensaje.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+.mensaje.exito {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #166534;
+}
+
+.listado-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cabecera-listado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vacio {
+  margin: 0;
+  padding: 1.4rem;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  color: #475569;
+  font-weight: 600;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th,
+td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+  vertical-align: middle;
+}
+
+th {
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.miniatura {
+  width: 68px;
+  height: 68px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: #f8fafc;
+}
+
+.sin-imagen {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 12px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 1px dashed #cbd5e1;
+}
+
+td strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #0f172a;
+}
+
+td small {
+  display: block;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.estado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.estado.activo {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.estado.inactivo {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.acciones-tabla {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 980px) {
+  .pagina-productos {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .pagina-productos {
+    padding: 18px 14px 26px;
+  }
+
+  .panel {
+    padding: 18px;
+    border-radius: 18px;
+  }
+
+  .cabecera-listado,
+  .fila,
+  .acciones-formulario {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .acciones-formulario button,
+  .cabecera-listado button {
+    width: 100%;
+  }
+}
+</style>
