@@ -5,6 +5,7 @@ import LoginView from '@/views/LoginView.vue'
 import RegistroView from '@/views/RegistroView.vue'
 import RecuperarView from '@/views/RecuperarView.vue'
 import CambiarView from '@/views/CambiarView.vue'
+import ProductosView from '@/views/ProductosView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,34 +33,29 @@ const router = createRouter({
       path: '/inicio',
       name: 'inicio',
       component: InicioView,
-      meta: {
-        requiereAutenticacion: true,
-      },
+      meta: { requiereAutenticacion: true },
     },
     {
       path: '/cambiar-password',
       name: 'cambiar-password',
       component: CambiarView,
-      meta: {
-        requiereAutenticacion: true,
-      },
+      meta: { requiereAutenticacion: true },
+    },
+    {
+      path: '/productos',
+      name: 'productos',
+      component: ProductosView,
+      meta: { requiereAutenticacion: true },
     },
   ],
 })
 
 router.beforeEach(async (destino) => {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  const {data: { session }} = await supabase.auth.getSession()
 
-  if (destino.meta.requiereAutenticacion && !session) {
-    return '/login'
-  }
+  if (destino.meta.requiereAutenticacion && !session) {return '/login'}
 
-  if (
-    session &&
-    (destino.path === '/login' || destino.path === '/registro' || destino.path === '/recuperar')
-  ) {
+  if (session &&(destino.path === '/login' || destino.path === '/registro' || destino.path === '/recuperar')) {
     return '/inicio'
   }
 })
